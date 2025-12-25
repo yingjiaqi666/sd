@@ -37,7 +37,7 @@ export default {
     if (this.$route.params.id) {
       this.isEdit = true;
       try {
-        const response = await axios.get(`http://localhost:8080/api/students/${this.$route.params.id}`);
+        const response = await axios.get(`http://localhost:8080/api/students/${this.$route.params.id}`, { withCredentials: true });
         this.student = response.data;
       } catch (error) {
         console.error('Failed to fetch student:', error);
@@ -48,9 +48,9 @@ export default {
     async saveStudent() {
       try {
         if (this.isEdit) {
-          await axios.put(`http://localhost:8080/api/students/${this.$route.params.id}`, this.student);
+          await axios.put(`http://localhost:8080/api/students/${this.$route.params.id}`, this.student, { withCredentials: true });
         } else {
-          await axios.post('http://localhost:8080/api/students', this.student);
+          await axios.post('http://localhost:8080/api/students', this.student, { withCredentials: true });
         }
         this.$router.push('/students');
       } catch (error) {
