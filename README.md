@@ -1,12 +1,12 @@
 **1. 运行后端:**
 
-* 在 VS Code 中打开一个新的终端。
+* 打开一个新的终端。
 * 导航到 [backend](vscode-file://vscode-app/d:/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) 目录: `cd backend`
 * 运行 Spring Boot 应用程序: `./mvnw spring-boot:run`
 
 **2. 运行前端:**
 
-* 在 VS Code 中打开另一个新的终端。
+* 打开另一个新的终端。
 * 导航到 [frontend](vscode-file://vscode-app/d:/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) 目录: `cd frontend`
 * 运行 Vue.js 开发服务器: `npm run dev`
 
