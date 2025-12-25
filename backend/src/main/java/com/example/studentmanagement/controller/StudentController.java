@@ -9,6 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/students")
@@ -42,16 +44,33 @@ public class StudentController {
         return studentService.saveStudent(student);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    // 管理员可编辑任意学生；学生仅能编辑与自己绑定的学生信息
+    @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
-        student.setId(id);
-        return studentService.saveStudent(student);
+    public Student updateStudent(@PathVariable Long id, @RequestBody Student student, Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+        if (isAdmin) {
+            Student updated = studentService.updateStudentFields(id, student);
+            if (updated == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found");
+            return updated;
+        }
+        // 学生身份，仅允许编辑自己的记录
+        Student existing = studentService.getStudentById(id);
+        if (existing == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found");
+        if (existing.getUser() == null || existing.getUser().getUsername() == null
+                || !authentication.getName().equals(existing.getUser().getUsername())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to edit this student");
+        }
+        Student updated = studentService.updateStudentFields(id, student);
+        if (updated == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found");
+        return updated;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteStudent(@PathVariable Long id) {
-        studentService.deleteStudent(id);
+        // 管理员删除学生时同时删除其对应的用户（将级联清理学生记录）
+        studentService.deleteStudentAndUser(id);
     }
 }
