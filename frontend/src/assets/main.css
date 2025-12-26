@@ -1,35 +1,89 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+    font-weight: normal;
+    min-height: 100vh;
 }
 
+/* 全屏页面容器 */
+.fullscreen-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+/* 表单容器样式 - 使用莫兰迪蓝色系 */
+.form-container {
+    background-color: rgba(255, 255, 255, 0.92);
+    padding: 2.5rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(160, 199, 198, 0.15);
+    border: 1px solid var(--mld-blue-light);
+}
+
+/* 表格容器样式 - 使用莫兰迪粉色系 */
+.table-container {
+    background-color: rgba(255, 255, 255, 0.92);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(220, 205, 202, 0.15);
+    border: 1px solid var(--mld-pink-light);
+}
+
+/* 深色主题适配 */
+@media (prefers-color-scheme: dark) {
+    .form-container {
+        background-color: rgba(40, 40, 40, 0.92);
+        border-color: var(--mld-blue-medium);
+    }
+
+    .table-container {
+        background-color: rgba(40, 40, 40, 0.92);
+        border-color: var(--mld-pink-medium);
+    }
+}
+
+/* 链接颜色使用莫兰迪蓝色系 */
 a,
 .green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+    text-decoration: none;
+    color: var(--mld-blue-dark);
+    transition: 0.4s;
+    padding: 3px;
 }
 
 @media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+    a:hover {
+        background-color: rgba(160, 199, 198, 0.2);
+    }
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .fullscreen-page {
+        padding: 1rem;
+    }
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+    .form-container {
+        padding: 1.5rem;
+    }
+
+    .table-container {
+        padding: 1rem;
+    }
 }
